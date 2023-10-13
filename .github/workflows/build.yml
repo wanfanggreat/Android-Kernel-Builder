@@ -149,9 +149,9 @@ jobs:
         env:
           arch: ${{ steps.generate-args.outputs.ARCH }}
         run: |
-          wget https://github.com/liangsai12/Android-Kernel-Builder-chopin/releases/download/1.0.0/add-lxc-docker-custom.sh
-          chmod 755 add-lxc-docker-custom.sh
-          ./add-lxc-docker-custom.sh arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
+          wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
+          chmod 755 LXC-DOCKER-OPEN-CONFIG.sh
+          ./LXC-DOCKER-OPEN-CONFIG.sh arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
           echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
 
       - name: 添加runc补丁
