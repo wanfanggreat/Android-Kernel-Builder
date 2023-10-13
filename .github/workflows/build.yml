@@ -149,7 +149,7 @@ jobs:
         env:
           arch: ${{ steps.generate-args.outputs.ARCH }}
         run: |
-          wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
+          wget https://github.com/wanfanggreat/Android-Kernel-Builder/releases/download/1.0.0/LXC-DOCKER-OPEN-CONFIG.sh
           chmod 755 LXC-DOCKER-OPEN-CONFIG.sh
           ./LXC-DOCKER-OPEN-CONFIG.sh arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
           echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
