@@ -145,37 +145,26 @@ jobs:
           cat arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
 
       - name: 开启lxc和docker配置
+        working-directory: ${{ env.KERNEL_NAME }}
+        env:
+          arch: ${{ steps.generate-args.outputs.ARCH }}
         run: |
-          cd $GITHUB_WORKSPACE/kernel_workspace
-          wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
-          chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
-          ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/${{ env.KERNEL_CONFIG }} -w
+          wget https://github.com/liangsai12/Android-Kernel-Builder-chopin/releases/download/1.0.0/add-lxc-docker-custom.sh
+          chmod 755 add-lxc-docker-custom.sh
+          ./add-lxc-docker-custom.sh arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
+          echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
 
-      
-      - name: 打入lxc补丁
+      - name: 添加runc补丁
+        working-directory: ${{ env.KERNEL_NAME }}
         run: |
-         cd $GITHUB_WORKSPACE/kernel_workspace
-         git clone https://github.com/tomxi1997/lxc-docker-support-for-android --depth=1
-         cp $GITHUB_WORKSPACE/kernel_workspace/lxc-docker-support-for-android/runcpatch.sh $GITHUB_WORKSPACE/kernel_workspace/
-         chmod a+x runcpatch.sh
-         if [ -f android-kernel/kernel/cgroup.c ]; then
-         ./runcpatch.sh android-kernel/kernel/cgroup.c               
-         fi
-       
-         if [ -f android-kernel/kernel/cgroup/cgroup.c ]; then
-         ./runcpatch.sh android-kernel/kernel/cgroup/cgroup.c               
-         fi
-         
-         if [ -f android-kernel/net/netfilter/xt_qtaguid.c ]; then
-           wget https://github.com/wu17481748/lxc-docker/releases/download/lxc/lxc.patch
-           patch -p0 < lxc.patch
-         fi
-
-      - name: 关闭ANDROID_PARANOID_NETWORK配置
-        run: |
-          cd $GITHUB_WORKSPACE/kernel_workspace
-          sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/${{ env.KERNEL_CONFIG }}
-          echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/${{ env.KERNEL_CONFIG }}
+          wget https://github.com/wanfanggreat/Android-Kernel-Builder/releases/download/1.0.0/runcpatch.sh
+          chmod a+x runcpatch.sh
+          if [ -f kernel/cgroup.c ]; then
+          ./runcpatch.sh kernel/cgroup.c               
+          fi
+          if [ -f kernel/cgroup/cgroup.c ]; then
+          ./runcpatch.sh kernel/cgroup/cgroup.c               
+          fi
 
       - name: "👍 Make defconfig"
         working-directory: ${{ env.KERNEL_NAME }}
