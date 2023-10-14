@@ -149,17 +149,10 @@ jobs:
         env:
           arch: ${{ steps.generate-args.outputs.ARCH }}
         run: |
-          rm -rf utils
-          git clone https://github.com/tomxi1997/lxc-docker-support-for-android.git utils
-          echo 'source "utils/Kconfig"' >> "Kconfig"
-          cat arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }} | tail -n 5  
-          echo "CONFIG_DOCKER=y" >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
-          sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
+          wget https://github.com/wanfanggreat/Android-Kernel-Builder/releases/download/1.0.0/LXC-DOCKER-OPEN-CONFIG.sh
+          chmod 755 LXC-DOCKER-OPEN-CONFIG.sh
+          ./LXC-DOCKER-OPEN-CONFIG.sh arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
           echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
-          cat arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }} | tail -n 5 
-            
-          #sed -i '/CONFIG_LOCALVERSION/d' arch/${{ env.arch }}/configs/${{ env.KERNEL_NAME }}
-          #echo 'CONFIG_LOCALVERSION="-LXC-KernelSU-support_Pdx"' >> arch/${{ env.arch }}/configs/${{ env.DEFCONFIG_NAME }}
 
       - name: 添加runc补丁
         working-directory: ${{ env.KERNEL_NAME }}
