@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "android_kernel_xiaomi_sdm845",
       "repo": "https://github.com/crdroidandroid/android_kernel_xiaomi_sdm845",
-      "branch": "11.0",
+      "branch": "12.1",
       "device": "dipper",
       "defconfig": "dipper_defconfig"
     },
